@@ -17,6 +17,24 @@ export function saveResponse(response) {
   };
   all.push(entry);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+
+  // Fire-and-forget sync to Google Sheet — never blocks or delays the UI.
+  fetch(
+    "https://script.google.com/macros/s/AKfycbynPq2r8-9QXT-lexKPe98DJ416cWtilMSgkS5XKPVXadqBPRRWAMc0j93FiyHfYLkgbA/exec",
+    {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        id: entry.id,
+        timestamp: entry.timestamp,
+        top: entry.top,
+        bottom: entry.bottom,
+        sleeve: entry.sleeve,
+        age: entry.age,
+      }),
+    }
+  ).catch(() => {});
+
   return entry;
 }
 

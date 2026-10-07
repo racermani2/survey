@@ -9,7 +9,7 @@ const ENTER = [0.16, 1, 0.3, 1];
  * Selected glow uses --page-glow-rgb so it matches the active Vanta palette.
  * Image prop: if provided, shows a product photo with the SVG icon as fallback.
  */
-export default function OptionCard({ icon, label, sublabel, image, selected, onTap, delay = 0 }) {
+export default function OptionCard({ icon, label, sublabel, image, selected, onTap, delay = 0, imageMaxWidth = "92%" }) {
   const [imgError, setImgError] = useState(false);
 
   const glassBackground = `
@@ -77,7 +77,7 @@ export default function OptionCard({ icon, label, sublabel, image, selected, onT
             onError={() => setImgError(true)}
             style={{
               maxHeight: "100%",
-              maxWidth: "82%",
+              maxWidth: imageMaxWidth,
               objectFit: "contain",
               display: "block",
             }}

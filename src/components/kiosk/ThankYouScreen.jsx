@@ -41,22 +41,15 @@ export default function ThankYouScreen() {
         >
           Thank you
         </h2>
-        <p
-          className="max-w-xs text-[15px] font-light leading-relaxed"
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="text-[10px] font-light uppercase tracking-[0.2em]"
           style={{ color: "#928a7d", textShadow: "0 1px 2px rgba(0,0,0,0.25), 0 1px 16px rgba(0,0,0,0.15)" }}
         >
-          Show this screen to our team to collect your reward.
-        </p>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className="text-[10px] font-light uppercase tracking-[0.2em]"
-        style={{ color: "#928a7d", textShadow: "0 1px 2px rgba(0,0,0,0.25), 0 1px 16px rgba(0,0,0,0.15)" }}
-      >
-        Starting next survey…
+          Starting next survey…
+        </motion.span>
       </motion.div>
     </motion.div>
   );

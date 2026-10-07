@@ -7,6 +7,7 @@ import ThankYouScreen from "@/components/kiosk/ThankYouScreen";
 import StaffView from "@/components/kiosk/StaffView";
 import GlassPagination from "@/components/kiosk/GlassPagination";
 import Counter from "@/components/Counter";
+import Logo from "@/components/kiosk/Logo";
 import { saveResponse, getAllResponses } from "@/lib/surveyStorage";
 import {
   ClassicCollaredIcon,
@@ -26,21 +27,23 @@ const SCREENS = [
   { key: "age", label: "Age" },
 ];
 
+const CLASSIC_COLLARED_IMG = "https://media.base44.com/images/public/6ab9370302b206e05eb4eac9/7918cd761_top-classic-collared.webp";
+
 const TOP_OPTIONS = [
-  { value: "classic_collared", label: "Classic Collared", sublabel: "Full button placket", Icon: ClassicCollaredIcon, image: "https://media.base44.com/images/public/6ab9370302b206e05eb4eac9/667bac2d6_WHITETEEcopy.webp" },
-  { value: "crew_neck", label: "Crew Neck Tee", sublabel: "Oversized fit", Icon: CrewNeckIcon, image: "https://media.base44.com/images/public/6ab9370302b206e05eb4eac9/6c4c16bd8_BLUETEEcopy.webp" },
-  { value: "collared_two_button", label: "Collared, two-button", sublabel: "Open placket · polo", Icon: CollaredTwoButtonIcon, image: "https://media.base44.com/images/public/6ab9370302b206e05eb4eac9/9bab81a58_crewneckteecopy.webp" },
+  { value: "classic_collared", label: "Classic Collared", sublabel: "Full button placket", Icon: ClassicCollaredIcon, image: CLASSIC_COLLARED_IMG },
+  { value: "crew_neck", label: "Crew Neck Tee", sublabel: "Oversized fit", Icon: CrewNeckIcon, image: "https://media.base44.com/images/public/6ab9370302b206e05eb4eac9/bdcf7cb3e_top-crew-neck.webp" },
+  { value: "collared_two_button", label: "Collared, two-button", sublabel: "Open placket · polo", Icon: CollaredTwoButtonIcon, image: "https://media.base44.com/images/public/6ab9370302b206e05eb4eac9/b915ed331_top-collared-two-button.webp" },
 ];
 
 const BOTTOM_OPTIONS = [
-  { value: "ankle", label: "Ankle length", sublabel: "Full length", Icon: AnkleLengthIcon },
-  { value: "shorts", label: "Shorts", sublabel: "Above knee", Icon: ShortsIcon },
-  { value: "three_quarter", label: "3/4th length", sublabel: "Cropped", Icon: ThreeQuarterIcon },
+  { value: "ankle", label: "Ankle length", sublabel: "Full length", Icon: AnkleLengthIcon, image: "https://media.base44.com/images/public/6ab9370302b206e05eb4eac9/d50e7d616_bottom-ankle.webp" },
+  { value: "shorts", label: "Shorts", sublabel: "Above knee", Icon: ShortsIcon, image: "https://media.base44.com/images/public/6ab9370302b206e05eb4eac9/0b827bf4c_bottom-shorts.webp" },
+  { value: "three_quarter", label: "3/4th length", sublabel: "Cropped", Icon: ThreeQuarterIcon, image: "https://media.base44.com/images/public/6ab9370302b206e05eb4eac9/0e52a0d8d_bottom-three-quarter.webp" },
 ];
 
 const SLEEVE_OPTIONS = [
-  { value: "full", label: "Full sleeve", sublabel: "Long", Icon: FullSleeveIcon },
-  { value: "half", label: "Half sleeve", sublabel: "Short", Icon: HalfSleeveIcon },
+  { value: "full", label: "Full sleeve", sublabel: "Long", Icon: FullSleeveIcon, image: "https://media.base44.com/images/public/6ab9370302b206e05eb4eac9/ff4d956b1_sleeve-full.webp" },
+  { value: "half", label: "Half sleeve", sublabel: "Short", Icon: HalfSleeveIcon, image: CLASSIC_COLLARED_IMG },
 ];
 
 const AGE_OPTIONS = [
@@ -54,9 +57,6 @@ const AGE_OPTIONS = [
 const SERIF = "Georgia, 'Times New Roman', serif";
 const ENTER = [0.16, 1, 0.3, 1];
 const EXIT = [0.7, 0, 0.84, 0];
-
-const LOGO_URL =
-  "https://media.base44.com/images/public/6ab9370302b206e05eb4eac9/f08c37bb5_ScreenshotDF465.png";
 
 export default function Kiosk() {
   const [screen, setScreen] = useState("top");
@@ -238,6 +238,22 @@ export default function Kiosk() {
             ))}
             <div className="hidden sm:block" />
           </div>
+        ) : screen === "sleeve" ? (
+          <div className="mx-auto grid w-full max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2">
+            {options.map((opt, i) => (
+              <OptionCard
+                key={opt.value}
+                icon={<opt.Icon />}
+                image={opt.image}
+                imageMaxWidth={opt.value === "half" ? "80%" : "92%"}
+                label={opt.label}
+                sublabel={opt.sublabel}
+                delay={0.2 + i * 0.05}
+                selected={selectedValue === opt.value}
+                onTap={() => advance(opt.value)}
+              />
+            ))}
+          </div>
         ) : (
           <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-3">
             {options.map((opt, i) => (
@@ -262,46 +278,42 @@ export default function Kiosk() {
     <div className="relative min-h-[100dvh] w-full overflow-hidden">
       <VantaBackground screen={screen} />
 
-      {/* ONE shared container — centered in viewport, all sections share its edges */}
-      <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-3xl flex-col px-6">
-        {/* Header row — counter pill left, logo center, same vertical line */}
-        <div className="relative flex shrink-0 items-center justify-center pt-6 pb-2">
-          <div
-            className="absolute left-0 flex items-center gap-2.5 rounded-full px-5 py-2.5"
-            style={{
-              width: "fit-content",
-              background: "rgba(255,255,255,0.12)",
-              backdropFilter: "blur(12px) saturate(180%)",
-              WebkitBackdropFilter: "blur(12px) saturate(180%)",
-              border: "1px solid rgba(255,255,255,0.4)",
-              boxShadow: "0 8px 30px rgba(0,0,0,0.06)",
-            }}
-          >
-            <Counter
-              key={counterKey}
-              value={responseCount}
-              fontSize={22}
-              fontWeight={800}
-              gap={1}
-              padding={0}
-              textColor="#1a1a1a"
-              digitPlaceHolders={false}
-            />
-            <span
-              className="text-[10px] font-light uppercase tracking-[0.18em]"
-              style={{ color: "rgba(34,30,26,0.5)", textShadow: "0 1px 2px rgba(0,0,0,0.25), 0 1px 16px rgba(0,0,0,0.15)" }}
-            >
-              surveyed
-            </span>
-          </div>
-          <div onClick={handleHeaderTap} style={{ mixBlendMode: "screen" }}>
-            <img
-              src={LOGO_URL}
-              alt="June Days"
+      {/* Counter pill — true left edge of viewport, respecting safe-area insets */}
+      <div
+        className="absolute z-20 flex items-center justify-center rounded-full px-3.5 py-1.5"
+        style={{
+          top: "calc(1.5rem + env(safe-area-inset-top))",
+          left: "calc(1.5rem + env(safe-area-inset-left))",
+          width: "fit-content",
+          background: "rgba(255,255,255,0.12)",
+          backdropFilter: "blur(12px) saturate(180%)",
+          WebkitBackdropFilter: "blur(12px) saturate(180%)",
+          border: "1px solid rgba(255,255,255,0.4)",
+          boxShadow: "0 8px 30px rgba(0,0,0,0.06)",
+        }}
+      >
+        <Counter
+          key={counterKey}
+          value={responseCount}
+          fontSize={18}
+          fontWeight={800}
+          gap={1}
+          padding={0}
+          textColor="#1a1a1a"
+          digitPlaceHolders={false}
+        />
+      </div>
+
+      {/* ONE shared container — centered in viewport */}
+      <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-5xl flex-col px-6">
+        {/* Header row — logo center */}
+        <div className="flex shrink-0 items-center justify-center pt-6 pb-2">
+          <div onClick={handleHeaderTap}>
+            <Logo
+              className="logo"
               style={{
                 height: "clamp(36px, 6vw, 56px)",
                 width: "auto",
-                display: "block",
               }}
             />
           </div>
@@ -322,28 +334,8 @@ export default function Kiosk() {
           </AnimatePresence>
         </main>
 
-        {/* Footer row — back button left, pagination center, same shared edges */}
-        <div className="relative flex shrink-0 items-center justify-center pb-6 pt-2">
-          {screen !== "top" && screen !== "thankyou" && (
-            <button
-              type="button"
-              onClick={goBack}
-              className="absolute left-0 flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium"
-              style={{
-                background:
-                  "linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)) padding-box, linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.15) 55%, rgba(255,255,255,0.03) 100%) border-box",
-                border: "1px solid transparent",
-                backdropFilter: "blur(40px) saturate(180%)",
-                WebkitBackdropFilter: "blur(40px) saturate(180%)",
-                color: "#221e1a",
-                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.5), 0 8px 30px rgba(var(--page-glow-rgb), 0.08)",
-                textShadow: "0 1px 2px rgba(0,0,0,0.25), 0 1px 16px rgba(0,0,0,0.15)",
-              }}
-            >
-              <ArrowLeft size={16} />
-              Back
-            </button>
-          )}
+        {/* Footer row — pagination center */}
+        <div className="flex shrink-0 items-center justify-center pb-6 pt-2">
           {screen !== "thankyou" && (
             <GlassPagination
               total={displaySteps.length}
@@ -352,6 +344,30 @@ export default function Kiosk() {
           )}
         </div>
       </div>
+
+      {/* Back button — true left edge of viewport, respecting safe-area insets */}
+      {screen !== "top" && screen !== "thankyou" && (
+        <button
+          type="button"
+          onClick={goBack}
+          className="absolute z-20 flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium"
+          style={{
+            bottom: "calc(1.5rem + env(safe-area-inset-bottom))",
+            left: "calc(1.5rem + env(safe-area-inset-left))",
+            background:
+              "linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)) padding-box, linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.15) 55%, rgba(255,255,255,0.03) 100%) border-box",
+            border: "1px solid transparent",
+            backdropFilter: "blur(40px) saturate(180%)",
+            WebkitBackdropFilter: "blur(40px) saturate(180%)",
+            color: "#221e1a",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.5), 0 8px 30px rgba(var(--page-glow-rgb), 0.08)",
+            textShadow: "0 1px 2px rgba(0,0,0,0.25), 0 1px 16px rgba(0,0,0,0.15)",
+          }}
+        >
+          <ArrowLeft size={16} />
+          Back
+        </button>
+      )}
 
       <AnimatePresence>
         {staffOpen && <StaffView onClose={() => setStaffOpen(false)} />}

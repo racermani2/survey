@@ -32,6 +32,7 @@ function crossfadeVanta(effect, from, to, duration = 750) {
     });
     document.documentElement.style.setProperty("--accent-glow", hexToCss(highlightColor));
     document.documentElement.style.setProperty("--page-glow-rgb", hexToRgbString(midtoneColor));
+    document.documentElement.style.setProperty("--logo-rgb", hexToRgbString(midtoneColor));
     if (t < 1) requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
@@ -50,6 +51,7 @@ export default function VantaBackground({ screen }) {
     // so the first frame uses the correct palette, not the CSS fallback.
     document.documentElement.style.setProperty("--accent-glow", hexToCss(PALETTES[paletteKey].highlightColor));
     document.documentElement.style.setProperty("--page-glow-rgb", hexToRgbString(PALETTES[paletteKey].midtoneColor));
+    document.documentElement.style.setProperty("--logo-rgb", hexToRgbString(PALETTES[paletteKey].midtoneColor));
 
     if (effectRef.current || !window.VANTA) return; // guard against double-init in dev
     effectRef.current = window.VANTA.FOG({
